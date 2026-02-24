@@ -26,6 +26,7 @@ model Tenant {
 
   users               TenantUser[]
   usageMetrics        UsageMetric[]
+  licenses            License[]
 
   @@map("tenants")
 }
@@ -148,6 +149,44 @@ enum IpStatus {
   AVAILABLE
   ALLOCATED
   RESERVED
+}
+
+// ─── License System ──────────────────────────────────────────────────────────
+
+// A license grants a tenant the right to use a specific Creovine product
+// under a specific plan with specific usage limits.
+model License {
+  id          String        @id @default(uuid())
+  key         String        @unique                 // e.g. cvlt_trial_abc123...
+  tenantId    String        @map("tenant_id")
+  product     String                                // e.g. "cvault-vpn"
+  plan        LicensePlan   @default(TRIAL)
+  status      LicenseStatus @default(ACTIVE)
+  maxUses     Int?          @map("max_uses")        // null = unlimited
+  usedCount   Int           @default(0) @map("used_count")
+  expiresAt   DateTime?     @map("expires_at")      // null = never expires
+  metadata    Json          @default("{}")          // per-product custom fields
+  createdAt   DateTime      @default(now()) @map("created_at")
+  updatedAt   DateTime      @updatedAt @map("updated_at")
+
+  tenant      Tenant        @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId])
+  @@index([product])
+  @@map("licenses")
+}
+
+enum LicensePlan {
+  TRIAL       // limited uses (default: 5 connections)
+  STARTER     // higher cap
+  PRO         // unlimited
+  ENTERPRISE  // unlimited + custom config
+}
+
+enum LicenseStatus {
+  ACTIVE
+  REVOKED
+  EXPIRED
 }
 
 // Usage metrics for billing

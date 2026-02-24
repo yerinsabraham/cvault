@@ -6,6 +6,7 @@ import { config } from './config';
 import { authRoutes } from './routes/auth.routes';
 import { deviceRoutes } from './routes/device.routes';
 import { vpnRoutes } from './routes/vpn.routes';
+import { licenseRoutes } from './routes/license.routes';
 import { prisma } from './utils/prisma';
 
 const fastify = Fastify({
@@ -50,9 +51,10 @@ async function start() {
     // CVault API v1 routes
     await fastify.register(
       async (fastify) => {
-        await fastify.register(authRoutes, { prefix: '/auth' });
-        await fastify.register(deviceRoutes, { prefix: '/devices' });
-        await fastify.register(vpnRoutes, { prefix: '/vpn' });
+              await fastify.register(authRoutes,    { prefix: '/auth' });
+        await fastify.register(deviceRoutes,  { prefix: '/devices' });
+        await fastify.register(vpnRoutes,     { prefix: '/vpn' });
+        await fastify.register(licenseRoutes, { prefix: '/licenses' });
       },
       { prefix: '/cvault/v1' }
     );

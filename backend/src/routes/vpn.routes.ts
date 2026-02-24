@@ -2,7 +2,9 @@ import { FastifyInstance } from 'fastify';
 import { z } from 'zod';
 import { prisma } from '../utils/prisma';
 import { wireguardService } from '../services/wireguard.service';
+import { licenseService } from '../services/license.service';
 import { fullAuth } from '../middleware/auth.middleware';
+import { licenseCheck } from '../middleware/license.middleware';
 
 const connectSchema = z.object({
   deviceId: z.string().uuid(),
@@ -11,7 +13,7 @@ const connectSchema = z.object({
 export async function vpnRoutes(fastify: FastifyInstance) {
   // Initiate VPN connection for a device
   fastify.post('/connect', {
-    preHandler: [fullAuth],
+    preHandler: [fullAuth, licenseCheck],
     handler: async (request, reply) => {
       try {
         const body = connectSchema.parse(request.body);
@@ -52,6 +54,15 @@ export async function vpnRoutes(fastify: FastifyInstance) {
             status: 'ACTIVE',
           },
         });
+
+        // Increment license usage counter
+        const licenseInfo = (request as any).license as { key: string } | undefined;
+        if (licenseInfo?.key) {
+          await licenseService.incrementUsage(licenseInfo.key).catch(() => {
+            // Non-fatal: log but don't fail the connection
+            fastify.log.warn(`Failed to increment license usage for key: ${licenseInfo.key}`);
+          });
+        }
 
         return reply.send({
           sessionId: session.id,

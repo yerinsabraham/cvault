@@ -47,6 +47,10 @@ const configSchema = z.object({
 
   // Redis (optional)
   redisUrl: z.string().optional(),
+
+  // License System
+  adminSecret: z.string().min(16),
+  trialMaxUses: z.coerce.number().default(5),
 });
 
 const env = {
@@ -93,6 +97,10 @@ const env = {
 
   // Redis
   redisUrl: process.env.REDIS_URL,
+
+  // License System
+  adminSecret: process.env.ADMIN_SECRET,
+  trialMaxUses: process.env.TRIAL_MAX_USES,
 };
 
 const parsed = configSchema.safeParse(env);
