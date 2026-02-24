@@ -1,0 +1,168 @@
+// This is your Prisma schema file
+// Learn more: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Business customers who use CVault platform
+model Tenant {
+  id                  String   @id @default(uuid())
+  name                String
+  apiKey              String   @unique @map("api_key")
+  apiSecretHash       String   @map("api_secret_hash")
+  status              TenantStatus @default(ACTIVE)
+  bandwidthLimitGb    Int?     @map("bandwidth_limit_gb")
+  userLimit           Int?     @map("user_limit")
+  maxDevicesPerUser   Int      @default(5) @map("max_devices_per_user")
+  whitelabelConfig    Json     @default("{}") @map("whitelabel_config")
+  createdAt           DateTime @default(now()) @map("created_at")
+  updatedAt           DateTime @updatedAt @map("updated_at")
+
+  users               TenantUser[]
+  usageMetrics        UsageMetric[]
+
+  @@map("tenants")
+}
+
+enum TenantStatus {
+  ACTIVE
+  SUSPENDED
+  TRIAL
+}
+
+// End users of tenant's applications
+model TenantUser {
+  id                  String   @id @default(uuid())
+  tenantId            String   @map("tenant_id")
+  externalUserId      String?  @map("external_user_id")
+  email               String?
+  passwordHash        String?  @map("password_hash")
+  createdAt           DateTime @default(now()) @map("created_at")
+  updatedAt           DateTime @updatedAt @map("updated_at")
+
+  tenant              Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  devices             Device[]
+
+  @@unique([tenantId, email])
+  @@unique([tenantId, externalUserId])
+  @@map("tenant_users")
+}
+
+// VPN devices registered by users
+model Device {
+  id                  String   @id @default(uuid())
+  tenantUserId        String   @map("tenant_user_id")
+  deviceName          String   @map("device_name")
+  publicKey           String   @unique @map("public_key")
+  privateKeyEncrypted String   @map("private_key_encrypted")
+  assignedIp          String   @unique @map("assigned_ip")
+  serverId            String   @map("server_id")
+  status              DeviceStatus @default(ACTIVE)
+  lastConnectedAt     DateTime? @map("last_connected_at")
+  createdAt           DateTime @default(now()) @map("created_at")
+  updatedAt           DateTime @updatedAt @map("updated_at")
+
+  tenantUser          TenantUser @relation(fields: [tenantUserId], references: [id], onDelete: Cascade)
+  server              Server   @relation(fields: [serverId], references: [id])
+  sessions            Session[]
+
+  @@map("devices")
+}
+
+enum DeviceStatus {
+  ACTIVE
+  REVOKED
+}
+
+// Active VPN connections
+model Session {
+  id                  String   @id @default(uuid())
+  deviceId            String   @map("device_id")
+  serverId            String   @map("server_id")
+  tenantId            String   @map("tenant_id")
+  connectedAt         DateTime @default(now()) @map("connected_at")
+  disconnectedAt      DateTime? @map("disconnected_at")
+  bandwidthMb         Float    @default(0) @map("bandwidth_mb")
+  status              SessionStatus @default(ACTIVE)
+
+  device              Device   @relation(fields: [deviceId], references: [id], onDelete: Cascade)
+  server              Server   @relation(fields: [serverId], references: [id])
+
+  @@map("sessions")
+}
+
+enum SessionStatus {
+  ACTIVE
+  DISCONNECTED
+}
+
+// WireGuard VPN servers
+model Server {
+  id                  String   @id @default(uuid())
+  name                String
+  region              String
+  publicIp            String   @map("public_ip")
+  publicKey           String   @map("public_key")
+  endpointPort        Int      @default(51820) @map("endpoint_port")
+  capacity            Int      @default(100)
+  currentLoad         Int      @default(0) @map("current_load")
+  status              ServerStatus @default(ACTIVE)
+  createdAt           DateTime @default(now()) @map("created_at")
+  updatedAt           DateTime @updatedAt @map("updated_at")
+
+  devices             Device[]
+  sessions            Session[]
+  ipPool              IpPool[]
+
+  @@map("servers")
+}
+
+enum ServerStatus {
+  ACTIVE
+  MAINTENANCE
+  OFFLINE
+}
+
+// IP address pool management
+model IpPool {
+  id                  String   @id @default(uuid())
+  ipAddress           String   @unique @map("ip_address")
+  serverId            String   @map("server_id")
+  deviceId            String?  @map("device_id")
+  status              IpStatus @default(AVAILABLE)
+  allocatedAt         DateTime? @map("allocated_at")
+  createdAt           DateTime @default(now()) @map("created_at")
+
+  server              Server   @relation(fields: [serverId], references: [id])
+
+  @@map("ip_pool")
+}
+
+enum IpStatus {
+  AVAILABLE
+  ALLOCATED
+  RESERVED
+}
+
+// Usage metrics for billing
+model UsageMetric {
+  id                  String   @id @default(uuid())
+  tenantId            String   @map("tenant_id")
+  date                DateTime @db.Date
+  bandwidthMb         Float    @default(0) @map("bandwidth_mb")
+  connectionMinutes   Int      @default(0) @map("connection_minutes")
+  activeUsers         Int      @default(0) @map("active_users")
+  apiCalls            Int      @default(0) @map("api_calls")
+  createdAt           DateTime @default(now()) @map("created_at")
+
+  tenant              Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@unique([tenantId, date])
+  @@map("usage_metrics")
+}

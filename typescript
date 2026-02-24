@@ -1,0 +1,265 @@
+Script started on Tue Feb 24 17:23:27 2026
+[1m[7m%[27m[1m[0m                                                                                [0m[27m[24m[Japple@apples-MacBook-Pro cvault % [K[?2004h[?2004l
+[1m[7m%[27m[1m[0m                                                                                [0m[27m[24m[Japple@apples-MacBook-Pro cvault % [K[?2004h  cat > /tmp/wg_setup.sh << 'EOF'[?2004l
+[0m[27m[24m[Jheredoc> [K[?2004h##!/bin/bash[?2004l
+[0m[27m[24m[Jheredoc> [K[?2004hsset -e[?2004l
+[0m[27m[24m[Jheredoc> [K[?2004h[?2004l
+[0m[27m[24m[Jheredoc> [K[?2004h## Create PostUp script[?2004l
+[0m[27m[24m[Jheredoc> [K[?2004hccat > /etc/wireguard/wg0_postup.sh << 'POSTUP'[?2004l
+[0m[27m[24m[Jheredoc> [K[?2004h##!/bin/bash[?2004l
+[0m[27m[24m[Jheredoc> [K[?2004hiiptables -I FORWARD 1 -i wg0 -o eth0 -j ACCEPT[?2004l
+[0m[27m[24m[Jheredoc> [K[?2004hiiptables -I FORWARD 2 -i eth0 -o wg0 -m conntrack --ctstate RELATED,EST [KAABLISHED -j ACCEPT[?2004l
+[0m[27m[24m[Jheredoc> [K[?2004hiiptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE[?2004l
+[0m[27m[24m[Jheredoc> [K[?2004hPPOSTUP[?2004l
+[0m[27m[24m[Jheredoc> [K[?2004hcchmod +x /etc/wireguard/wg0_postup.sh[?2004l
+[0m[27m[24m[Jheredoc> [K[?2004h[?2004l
+[0m[27m[24m[Jheredoc> [K[?2004h## Create PostDown script[?2004l
+[0m[27m[24m[Jheredoc> [K[?2004hccat > /etc/wireguard/wg0_postdown.sh << 'POSTDOWN'[?2004l
+[0m[27m[24m[Jheredoc> [K[?2004h##!/bin/bash[?2004l
+[0m[27m[24m[Jheredoc> [K[?2004hiiptables -D FORWARD -i wg0 -o eth0 -j ACCEPT 2>/dev/null || true[?2004l
+[0m[27m[24m[Jheredoc> [K[?2004hiiptables -D FORWARD -i eth0 -o wg0 -m conntrack --ctstate RELATED,ESTAB [KLLISHED -j ACCEPT 2>/dev/null || true[?2004l
+[0m[27m[24m[Jheredoc> [K[?2004hiiptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE 2>/dev/null || tru [Ke[?2004l
+[0m[27m[24m[Jheredoc> [K[?2004hPPOSTDOWN[?2004l
+[0m[27m[24m[Jheredoc> [K[?2004hcchmod +x /etc/wireguard/wg0_postdown.sh[?2004l
+[0m[27m[24m[Jheredoc> [K[?2004h[?2004l
+[0m[27m[24m[Jheredoc> [K[?2004h## Update wg0.conf PostUp/PostDown[?2004l
+[0m[27m[24m[Jheredoc> [K[?2004hssed -i 's|^PostUp = .*|PostUp = /etc/wireguard/wg0_postup.sh|' /etc/wir [Keeguard/wg0.conf[?2004l
+[0m[27m[24m[Jheredoc> [K[?2004hssed -i 's|^PostDown = .*|PostDown = /etc/wireguard/wg0_postdown.sh|' /e [Kttc/wireguard/wg0.conf[?2004l
+[0m[27m[24m[Jheredoc> [K[?2004h[?2004l
+[0m[27m[24m[Jheredoc> [K[?2004h## Add persistent rules to UFW before.rules if not alre#!/bin/bash[?2004l
+[0m[27m[24m[Jheredoc> [K[?2004hsset -e[?2004l
+[0m[27m[24m[Jheredoc> [K[?2004h[?2004l
+[0m[27m[24m[Jheredoc> [K[?2004h## Create Powaset -e[?2004l
+[0m[27m[24m[Jheredoc> [K[?2004h[?2004l
+[0m[27m[24m[Jheredoc> [K[?2004h## c/[?2004l
+[0m[27m[24m[Jheredoc> [K[?2004h## Crefocat > /etc/wireguard/-i#!/bin/bash[?2004l
+[0m[27m[24m[Jheredoc> [K[?2004hiiptables -I FORWARD 1 -i wg0 -o eeGiptables --Aiptables -I FORWARD 2 -i [K  eth0 -o wg0 -m connt[?2004l
+[0m[27m[24m[Jheredoc> [K[?2004h--iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE[?2004l
+[0m[27m[24m[Jheredoc> [K[?2004hPPOSTUP[?2004l
+[0m[27m[24m[Jheredoc> [K[?2004hcchmod +x /etc/wireguard/wg0_' POSTUP[?2004l
+[0m[27m[24m[Jheredoc> [K[?2004hcchmod +x /etc/wireguard/wg0_postup.sh[?2004l
+[0m[27m[24m[Jheredoc> [K[?2004h[?2004l
+[0m[27m[24m[Jheredoc> [K[?2004h## Cre tchmod b[?2004l
+[0m[27m[24m[Jheredoc> [K[?2004h## Create PostDown script[?2004l
+[0m[27m[24m[Jheredoc> [K[?2004hccat > /etce'[?2004l
+[0m[27m[24m[Jheredoc> [K[?2004hccat > /etc/wireguard/wgco#!/bin/bash[?2004l
+[0m[27m[24m[Jheredoc> [K[?2004hiiptables -D FORWARD -i wg0 -o eth0 -j/tiptables -p.iptables -D FORWARD  [K--i eth0 -o wg0 -m conntrack --ctstate RELATvpiptables -t nat -D POSTROUTING -o e [Ktth0 -j MASQUERADE[?2004l
+[1m[7m%[27m[1m[0m                                                                                [0m[27m[24m[Japple@apples-MacBook-Pro cvault % [K[?2004h  scp -i ~/.ssh/cvault_vpn_server /tmp/wg_fix_f [Koorwarding.sh root@165.22.138.31:/tmp/wg_fix_forwarding.sh[?2004l
+wg_fix_forwarding.sh                            0%    0     0.0KB/s   --:-- ETAwg_fix_forwarding.sh                          100% 1484     3.6KB/s   00:00    
+[1m[7m%[27m[1m[0m                                                                                [0m[27m[24m[Japple@apples-MacBook-Pro cvault % [K[?2004h[?2004l
+[1m[7m%[27m[1m[0m                                                                                [0m[27m[24m[Japple@apples-MacBook-Pro cvault % [K[?2004h  ssh -i ~/.ssh/cvault_vpn_server root@165.22.1 [K338.31 "bash /tmp/wg_fix_forwarding.sh"[?2004l
+Added WireGuard rules to UFW before.rules
+Setup complete. Updated wg0.conf:
+[Interface]
+Address = 10.8.0.1/16
+PostUp = /etc/wireguard/wg0_postup.sh
+PostDown = /etc/wireguard/wg0_postdown.sh
+ListenPort = 51820
+PrivateKey = WA/dJRUvnm6O5wsAX01EHC3RI0FTLY70Q2KYIxuM52I=
+
+[Peer]
+[1m[7m%[27m[1m[0m                                                                                [0m[27m[24m[Japple@apples-MacBook-Pro cvault % [K[?2004h[?2004l
+[1m[7m%[27m[1m[0m                                                                                [0m[27m[24m[Japple@apples-MacBook-Pro cvault % [K[?2004h  ssh -i ~/.ssh/cvault_vpn_server root@165.22.1 [K338.31 'head -8 /etc/wireguard/wg0.conf'[?2004l
+[Interface]
+Address = 10.8.0.1/16
+PostUp = /etc/wireguard/wg0_postup.sh
+PostDown = /etc/wireguard/wg0_postdown.sh
+ListenPort = 51820
+PrivateKey = WA/dJRUvnm6O5wsAX01EHC3RI0FTLY70Q2KYIxuM52I=
+
+[Peer]
+[1m[7m%[27m[1m[0m                                                                                [0m[27m[24m[Japple@apples-MacBook-Pro cvault % [K[?2004h[?2004l
+[1m[7m%[27m[1m[0m                                                                                [0m[27m[24m[Japple@apples-MacBook-Pro cvault % [K[?2004h  ssh -i ~/.ssh/cvault_vpn_server root@165.22.1 [K338.31 'cat /etc/wireguard/wg0.conf | head -10'[?2004l
+[Interface]
+Address = 10.8.0.1/16
+PostUp = /etc/wireguard/wg0_postup.sh
+PostDown = /etc/wireguard/wg0_postdown.sh
+ListenPort = 51820
+PrivateKey = WA/dJRUvnm6O5wsAX01EHC3RI0FTLY70Q2KYIxuM52I=
+
+[Peer]
+PublicKey = MGK0+4Z1xuV5zAEE5kmE4bYDMocUoWD3PAEyP0KNEmg=
+Endpoint = 102.89.46.70:84
+[1m[7m%[27m[1m[0m                                                                                [0m[27m[24m[Japple@apples-MacBook-Pro cvault % [K[?2004h[?2004l
+[1m[7m%[27m[1m[0m                                                                                [0m[27m[24m[Japple@apples-MacBook-Pro cvault % [K[?2004h  ssh -i ~/.ssh/cvault_vpn_server root@165.22.1 [K338.31 'echo "=START="; cat /etc/wireguard/wg0.conf | head -10; echo "=END="'[?2004l
+=START=
+[Interface]
+Address = 10.8.0.1/16
+PostUp = /etc/wireguard/wg0_postup.sh
+PostDown = /etc/wireguard/wg0_postdown.sh
+ListenPort = 51820
+PrivateKey = WA/dJRUvnm6O5wsAX01EHC3RI0FTLY70Q2KYIxuM52I=
+
+[Peer]
+PublicKey = MGK0+4Z1xuV5zAEE5kmE4bYDMocUoWD3PAEyP0KNEmg=
+Endpoint = 102.89.46.70:84
+=END=
+[1m[7m%[27m[1m[0m                                                                                [0m[27m[24m[Japple@apples-MacBook-Pro cvault % [K[?2004h[?2004l
+[1m[7m%[27m[1m[0m                                                                                [0m[27m[24m[Japple@apples-MacBook-Pro cvault % [K[?2004h  ssh -i ~/.ssh/cvault_vpn_server root@165.22.1 [K338.31 'hostname && date'[?2004l
+cvault-vpn-server
+Tue Feb 24 16:26:09 UTC 2026
+[1m[7m%[27m[1m[0m                                                                                [0m[27m[24m[Japple@apples-MacBook-Pro cvault % [K[?2004h[?2004l
+[1m[7m%[27m[1m[0m                                                                                [0m[27m[24m[Japple@apples-MacBook-Pro cvault % [K[?2004h  ssh -o ConnectTimeout=10 -i ~/.ssh/cvault_vpn [K__server root@165.22.138.31 'hostname && date' 2>&1[?2004l
+cvault-vpn-server
+Tue Feb 24 16:26:19 UTC 2026
+[1m[7m%[27m[1m[0m                                                                                [0m[27m[24m[Japple@apples-MacBook-Pro cvault % [K[?2004h[?2004l
+[1m[7m%[27m[1m[0m                                                                                [0m[27m[24m[Japple@apples-MacBook-Pro cvault % [K[?2004h  echo "test" && sudo wg show 2>&1 | head -5[?2004l
+test
+Password:
+
+[1m[7m%[27m[1m[0m                                                                                [0m[27m[24m[Japple@apples-MacBook-Pro cvault % [K[?2004h  ifconfig | grep -A2 utun 2>&1 | head -20[?2004l
+utun0: flags=8051<UP,POINTOPOINT,RUNNING,MULTICAST> mtu 1500
+	inet6 fe80::9134:4cc7:5365:bbdf%utun0 prefixlen 64 scopeid 0xc 
+	nd6 options=201<PERFORMNUD,DAD>
+utun1: flags=8051<UP,POINTOPOINT,RUNNING,MULTICAST> mtu 1380
+	inet6 fe80::2e35:99f4:862d:e2be%utun1 prefixlen 64 scopeid 0xd 
+	nd6 options=201<PERFORMNUD,DAD>
+utun2: flags=8051<UP,POINTOPOINT,RUNNING,MULTICAST> mtu 2000
+	inet6 fe80::ee29:15b9:d6fd:e6bf%utun2 prefixlen 64 scopeid 0xe 
+	nd6 options=201<PERFORMNUD,DAD>
+utun3: flags=8051<UP,POINTOPOINT,RUNNING,MULTICAST> mtu 1000
+	inet6 fe80::ce81:b1c:bd2c:69e%utun3 prefixlen 64 scopeid 0xf 
+	nd6 options=201<PERFORMNUD,DAD>
+[1m[7m%[27m[1m[0m                                                                                [0m[27m[24m[Japple@apples-MacBook-Pro cvault % [K[?2004h[?2004l
+[1m[7m%[27m[1m[0m                                                                                [0m[27m[24m[Japple@apples-MacBook-Pro cvault % [K[?2004h  ifconfig | grep -B1 "10.8.0" 2>&1[?2004l
+[1m[7m%[27m[1m[0m                                                                                [0m[27m[24m[Japple@apples-MacBook-Pro cvault % [K[?2004h[?2004l
+[1m[7m%[27m[1m[0m                                                                                [0m[27m[24m[Japple@apples-MacBook-Pro cvault % [K[?2004h  ssh -v -o ConnectTimeout=10 -i ~/.ssh/cvault_ [Kvvpn_server root@165.22.138.31 'echo CONNECTED; hostname' 2>&1 | tail -20[?2004l
+debug1: pledge: filesystem
+debug1: client_input_global_request: rtype hostkeys-00@openssh.com want_reply 0
+debug1: client_input_hostkeys: searching /Users/apple/.ssh/known_hosts for 165.22.138.31 / (none)
+debug1: client_input_hostkeys: searching /Users/apple/.ssh/known_hosts2 for 165.22.138.31 / (none)
+debug1: client_input_hostkeys: hostkeys file /Users/apple/.ssh/known_hosts2 does not exist
+debug1: client_input_hostkeys: no new or deprecated keys from server
+debug1: Remote: /root/.ssh/authorized_keys:1: key options: agent-forwarding port-forwarding pty user-rc x11-forwarding
+debug1: Remote: /root/.ssh/authorized_keys:1: key options: agent-forwarding port-forwarding pty user-rc x11-forwarding
+debug1: Sending environment.
+debug1: channel 0: setting env LANG = "en_US.UTF-8"
+debug1: Sending command: echo CONNECTED; hostname
+debug1: pledge: fork
+debug1: client_input_channel_req: channel 0 rtype exit-status reply 0
+debug1: client_input_channel_req: channel 0 rtype eow@openssh.com reply 0
+CONNECTED
+cvault-vpn-server
+debug1: channel 0: free: client-session, nchannels 1
+Transferred: sent 3580, received 4088 bytes, in 1.1 seconds
+Bytes per second: sent 3266.1, received 3729.6
+debug1: Exit status 0
+[1m[7m%[27m[1m[0m                                                                                [0m[27m[24m[Japple@apples-MacBook-Pro cvault % [K[?2004h[?2004l
+[1m[7m%[27m[1m[0m                                                                                [0m[27m[24m[Japple@apples-MacBook-Pro cvault % [K[?2004h  ping -c 2 -t 5 165.22.138.31 2>&1[?2004l
+PING 165.22.138.31 (165.22.138.31): 56 data bytes
+64 bytes from 165.22.138.31: icmp_seq=0 ttl=38 time=378.229 ms
+
+--- 165.22.138.31 ping statistics ---
+2 packets transmitted, 1 packets received, 50.0% packet loss
+round-trip min/avg/max/stddev = 378.229/378.229/378.229/0.000 ms
+[1m[7m%[27m[1m[0m                                                                                [0m[27m[24m[Japple@apples-MacBook-Pro cvault % [K[?2004h[?2004l
+[1m[7m%[27m[1m[0m                                                                                [0m[27m[24m[Japple@apples-MacBook-Pro cvault % [K[?2004h  wait[?2004l
+[1m[7m%[27m[1m[0m                                                                                [0m[27m[24m[Japple@apples-MacBook-Pro cvault % [K[?2004h[?2004l
+[1m[7m%[27m[1m[0m                                                                                [0m[27m[24m[Japple@apples-MacBook-Pro cvault % [K[?2004h  ssh -o ConnectTimeout=30 -o ServerAliveInterv [Kaal=5 -i ~/.ssh/cvault_vpn_server root@165.22.138.31 'echo OK && hostname' 2>&1[?2004l
+OK
+cvault-vpn-server
+[1m[7m%[27m[1m[0m                                                                                [0m[27m[24m[Japple@apples-MacBook-Pro cvault % [K[?2004h[?2004l
+[1m[7m%[27m[1m[0m                                                                                [0m[27m[24m[Japple@apples-MacBook-Pro cvault % [K[?2004h  ls -la ~/.ssh/cvault_vpn_server 2>&1[?2004l
+-rw-------@ 1 apple  staff  411 Feb 24 01:29 /Users/apple/.ssh/cvault_vpn_server
+[1m[7m%[27m[1m[0m                                                                                [0m[27m[24m[Japple@apples-MacBook-Pro cvault % [K[?2004h[?2004l
+[1m[7m%[27m[1m[0m                                                                                [0m[27m[24m[Japple@apples-MacBook-Pro cvault % [K[?2004h  ssh -o ConnectTimeout=30 -o GSSAPIAuthenticat [Kiion=no -o StrictHostKeyChecking=no -i ~/.ssh/cvault_vpn_server root@165.22.138.3 [K11 'echo OK; hostname' 2>&1[?2004l
+OK
+cvault-vpn-server
+[1m[7m%[27m[1m[0m                                                                                [0m[27m[24m[Japple@apples-MacBook-Pro cvault % [K[?2004h[?2004l
+[1m[7m%[27m[1m[0m                                                                                [0m[27m[24m[Japple@apples-MacBook-Pro cvault % [K[?2004h  jobs -l 2>&1; echo "---"; ps aux | grep ssh | [K  grep -v grep 2>&1[?2004l
+---
+apple             3051   0.0  0.0 33611432   1392   ??  S     5:20PM   0:00.12 /usr/bin/ssh-agent -l
+[1m[7m%[27m[1m[0m                                                                                [0m[27m[24m[Japple@apples-MacBook-Pro cvault % [K[?2004h[?2004l
+[1m[7m%[27m[1m[0m                                                                                [0m[27m[24m[Japple@apples-MacBook-Pro cvault % [K[?2004h  curl -sk --max-time 10 https://api.creovine.c [Koom/cvault/v1/health 2>&1[?2004l
+{"message":"Route GET:/cvault/v1/health not found","error":"Not Found","statusCode":404}[1m[7m%[27m[1m[0m                                                                                [0m[27m[24m[Japple@apples-MacBook-Pro cvault % [K[?2004h[?2004l
+[1m[7m%[27m[1m[0m                                                                                [0m[27m[24m[Japple@apples-MacBook-Pro cvault % [K[?2004h  ssh -o ConnectTimeout=30 -i ~/.ssh/cvault_vpn [K__server root@165.22.138.31 'bash /tmp/wg_fix_forwarding.sh && echo DONE' 2>&1; e [Kccho "EXIT=$?"[?2004l
+Setup complete. Updated wg0.conf:
+[Interface]
+Address = 10.8.0.1/16
+PostUp = /etc/wireguard/wg0_postup.sh
+PostDown = /etc/wireguard/wg0_postdown.sh
+ListenPort = 51820
+PrivateKey = WA/dJRUvnm6O5wsAX01EHC3RI0FTLY70Q2KYIxuM52I=
+
+[Peer]
+DONE
+EXIT=0
+[1m[7m%[27m[1m[0m                                                                                [0m[27m[24m[Japple@apples-MacBook-Pro cvault % [K[?2004h[?2004l
+[1m[7m%[27m[1m[0m                                                                                [0m[27m[24m[Japple@apples-MacBook-Pro cvault % [K[?2004h  nc -w 10 -z 165.22.138.31 22 2>&1; echo "NC_E [KXXIT=$?"[?2004l
+Connection to 165.22.138.31 port 22 [tcp/ssh] succeeded!
+NC_EXIT=0
+[1m[7m%[27m[1m[0m                                                                                [0m[27m[24m[Japple@apples-MacBook-Pro cvault % [K[?2004h[?2004l
+[1m[7m%[27m[1m[0m                                                                                [0m[27m[24m[Japple@apples-MacBook-Pro cvault % [K[?2004h  ssh -o BatchMode=yes -o ConnectTimeout=15 -i  [K~~/.ssh/cvault_vpn_server root@165.22.138.31 'echo HELLO' 2>&1; echo "RC=$?"[?2004l
+HELLO
+RC=0
+[1m[7m%[27m[1m[0m                                                                                [0m[27m[24m[Japple@apples-MacBook-Pro cvault % [K[?2004h[?2004l
+[1m[7m%[27m[1m[0m                                                                                [0m[27m[24m[Japple@apples-MacBook-Pro cvault % [K[?2004h  head -1 ~/.ssh/cvault_vpn_server 2>&1[?2004l
+-----BEGIN OPENSSH PRIVATE KEY-----
+[1m[7m%[27m[1m[0m                                                                                [0m[27m[24m[Japple@apples-MacBook-Pro cvault % [K[?2004h[?2004l
+[1m[7m%[27m[1m[0m                                                                                [0m[27m[24m[Japple@apples-MacBook-Pro cvault % [K[?2004h  ssh -vvv -o ConnectTimeout=10 -i ~/.ssh/cvaul [Ktt_vpn_server root@165.22.138.31 'echo X' 2>&1 | head -40[?2004l
+OpenSSH_9.9p2, LibreSSL 3.3.6
+debug1: Reading configuration data /etc/ssh/ssh_config
+debug1: /etc/ssh/ssh_config line 21: include /etc/ssh/ssh_config.d/* matched no files
+debug1: /etc/ssh/ssh_config line 54: Applying options for *
+debug2: resolve_canonicalize: hostname 165.22.138.31 is address
+debug3: expanded UserKnownHostsFile '~/.ssh/known_hosts' -> '/Users/apple/.ssh/known_hosts'
+debug3: expanded UserKnownHostsFile '~/.ssh/known_hosts2' -> '/Users/apple/.ssh/known_hosts2'
+debug1: Authenticator provider $SSH_SK_PROVIDER did not resolve; disabling
+debug3: channel_clear_timeouts: clearing
+debug3: ssh_connect_direct: entering
+debug1: Connecting to 165.22.138.31 [165.22.138.31] port 22.
+debug3: set_sock_tos: set socket 3 IP_TOS 0x48
+debug2: fd 3 setting O_NONBLOCK
+debug1: fd 3 clearing O_NONBLOCK
+debug1: Connection established.
+debug3: timeout: 10000 ms remain after connect
+debug1: identity file /Users/apple/.ssh/cvault_vpn_server type 3
+debug1: identity file /Users/apple/.ssh/cvault_vpn_server-cert type -1
+debug1: Local version string SSH-2.0-OpenSSH_9.9
+debug1: Remote protocol version 2.0, remote software version OpenSSH_9.6p1 Ubuntu-3ubuntu13.14
+debug1: compat_banner: match: OpenSSH_9.6p1 Ubuntu-3ubuntu13.14 pat OpenSSH* compat 0x04000000
+debug2: fd 3 setting O_NONBLOCK
+debug1: Authenticating to 165.22.138.31:22 as 'root'
+debug3: record_hostkey: found key type ED25519 in file /Users/apple/.ssh/known_hosts:1
+debug3: record_hostkey: found key type RSA in file /Users/apple/.ssh/known_hosts:2
+debug3: record_hostkey: found key type ECDSA in file /Users/apple/.ssh/known_hosts:3
+debug3: load_hostkeys_file: loaded 3 keys from 165.22.138.31
+debug1: load_hostkeys: fopen /Users/apple/.ssh/known_hosts2: No such file or directory
+debug1: load_hostkeys: fopen /etc/ssh/ssh_known_hosts: No such file or directory
+debug1: load_hostkeys: fopen /etc/ssh/ssh_known_hosts2: No such file or directory
+debug3: order_hostkeyalgs: have matching best-preference key type ssh-ed25519-cert-v01@openssh.com, using HostkeyAlgorithms verbatim
+debug3: send packet: type 20
+debug1: SSH2_MSG_KEXINIT sent
+debug3: receive packet: type 20
+debug1: SSH2_MSG_KEXINIT received
+debug2: local client KEXINIT proposal
+debug2: KEX algorithms: sntrup761x25519-sha512,sntrup761x25519-sha512@openssh.com,mlkem768x25519-sha256,curve25519-sha256,curve25519-sha256@libssh.org,ecdh-sha2-nistp256,ecdh-sha2-nistp384,ecdh-sha2-nistp521,diffie-hellman-group-exchange-sha256,diffie-hellman-group16-sha512,diffie-hellman-group18-sha512,diffie-hellman-group14-sha256,ext-info-c,kex-strict-c-v00@openssh.com
+debug2: host key algorithms: ssh-ed25519-cert-v01@openssh.com,ecdsa-sha2-nistp256-cert-v01@openssh.com,ecdsa-sha2-nistp384-cert-v01@openssh.com,ecdsa-sha2-nistp521-cert-v01@openssh.com,sk-ssh-ed25519-cert-v01@openssh.com,sk-ecdsa-sha2-nistp256-cert-v01@openssh.com,rsa-sha2-512-cert-v01@openssh.com,rsa-sha2-256-cert-v01@openssh.com,ssh-ed25519,ecdsa-sha2-nistp256,ecdsa-sha2-nistp384,ecdsa-sha2-nistp521,sk-ssh-ed25519@openssh.com,sk-ecdsa-sha2-nistp256@openssh.com,rsa-sha2-512,rsa-sha2-256
+debug2: ciphers ctos: chacha20-poly1305@openssh.com,aes128-ctr,aes192-ctr,aes256-ctr,aes128-gcm@openssh.com,aes256-gcm@openssh.com
+debug2: ciphers stoc: chacha20-poly1305@openssh.com,aes128-ctr,aes192-ctr,aes256-ctr,aes128-gcm@openssh.com,aes256-gcm@openssh.com
+[1m[7m%[27m[1m[0m                                                                                [0m[27m[24m[Japple@apples-MacBook-Pro cvault % [K[?2004h[?2004l
+[1m[7m%[27m[1m[0m                                                                                [0m[27m[24m[Japple@apples-MacBook-Pro cvault % [K[?2004h  ssh -vvv -o ConnectTimeout=10 -i ~/.ssh/cvaul [Ktt_vpn_server root@165.22.138.31 'echo X' 2>&1 | tail -20[?2004l
+debug3: channel 0: will not send data after close
+debug2: channel 0: obuf empty
+debug2: chan_shutdown_write: channel 0: (i3 o1 sock -1 wfd 5 efd 6 [write])
+debug2: channel 0: output drain -> closed
+debug2: channel 0: almost dead
+debug2: channel 0: gc: notify user
+debug2: channel 0: gc: user detached
+debug2: channel 0: send_close2
+debug2: channel 0: send close for remote id 0
+debug3: send packet: type 97
+debug2: channel 0: is dead
+debug2: channel 0: garbage collecting
+debug1: channel 0: free: client-session, nchannels 1
+debug3: channel 0: status: The following connections are open:
+  #0 client-session (t4 [session] r0 nm0 i3/0 o3/0 e[write]/0 fd -1/-1/6 sock -1 cc -1 nc0 io 0x00/0x00)
+
+debug3: send packet: type 1
+Transferred: sent 3564, received 4044 bytes, in 0.9 seconds
+Bytes per second: sent 4062.2, received 4609.3
+debug1: Exit status 0
+[1m[7m%[27m[1m[0m                                                                                [0m[27m[24m[Japple@apples-MacBook-Pro cvault % [K[?2004h[?2004l
+[1m[7m%[27m[1m[0m                                                                                [0m[27m[24m[Japple@apples-MacBook-Pro cvault % [K[?2004h  ssh -o ConnectTimeout=20 -i ~/.ssh/cvault_vpn [K__server root@165.22.138.31 'echo X' 2>&1[?2004l
+X
+[1m[7m%[27m[1m[0m                                                                                [0m[27m[24m[Japple@apples-MacBook-Pro cvault % [K[?2004h
