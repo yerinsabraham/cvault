@@ -1,0 +1,93 @@
+# Environment files
+.env
+.env.*
+!.env.example
+*.env
+
+# Credentials & Secrets
+*credentials*
+*secrets*
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+accessKeys*.csv
+
+# Dependencies
+node_modules/
+vendor/
+.pnp
+.pnp.js
+
+# Build outputs
+dist/
+build/
+out/
+*.log
+*.log.*
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# Testing
+coverage/
+.nyc_output
+*.test.js.snap
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE & Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.classpath
+.settings/
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Terraform & Infrastructure
+*.tfstate
+*.tfstate.*
+*.tfvars
+.terraform/
+.terraform.lock.hcl
+
+# Docker
+docker-compose.override.yml
+
+# WireGuard configs (sensitive)
+*.conf
+wg*.conf
+
+# SSH keys
+id_rsa
+id_rsa.pub
+id_ed25519
+id_ed25519.pub
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.bak
+*.backup
+
+# Package manager locks (optional - team preference)
+# package-lock.json
+# yarn.lock
+# pnpm-lock.yaml
