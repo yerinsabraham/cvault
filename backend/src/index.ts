@@ -17,9 +17,27 @@ const fastify = Fastify({
 
 async function start() {
   try {
+    // Build allowed origins list — supports comma-separated CORS_ORIGIN env var
+    const rawOrigin = process.env.CORS_ORIGIN ?? '*';
+    const devOrigins = ['http://localhost:3000', 'http://localhost:3001'];
+    let allowedOrigins: string[] | '*';
+    if (rawOrigin === '*') {
+      allowedOrigins = '*';
+    } else {
+      const prodOrigins = rawOrigin.split(',').map((o) => o.trim()).filter(Boolean);
+      allowedOrigins = config.nodeEnv === 'production'
+        ? [...prodOrigins, ...devOrigins]
+        : [...prodOrigins, ...devOrigins];
+    }
+
     // Register plugins
     await fastify.register(cors, {
-      origin: config.nodeEnv === 'production' && process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN : '*',
+      origin: (origin, cb) => {
+        if (allowedOrigins === '*') return cb(null, true);
+        if (!origin) return cb(null, true); // server-to-server / curl
+        if ((allowedOrigins as string[]).includes(origin)) return cb(null, true);
+        cb(new Error(`Origin ${origin} not allowed`), false);
+      },
       credentials: true,
     });
 
