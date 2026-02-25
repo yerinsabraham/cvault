@@ -48,6 +48,9 @@ const configSchema = z.object({
   // Redis (optional)
   redisUrl: z.string().optional(),
 
+  // Google OAuth
+  googleClientId: z.string().optional(),
+
   // License System
   adminSecret: z.string().min(16),
   trialMaxUses: z.coerce.number().default(5),
@@ -97,6 +100,9 @@ const env = {
 
   // Redis
   redisUrl: process.env.REDIS_URL,
+
+  // Google OAuth
+  googleClientId: process.env.GOOGLE_CLIENT_ID,
 
   // License System
   adminSecret: process.env.ADMIN_SECRET,

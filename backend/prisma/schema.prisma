@@ -43,6 +43,9 @@ model TenantUser {
   tenantId            String   @map("tenant_id")
   externalUserId      String?  @map("external_user_id")
   email               String?
+  name                String?
+  role                UserRole @default(USER)
+  googleId            String?  @unique @map("google_id")
   passwordHash        String?  @map("password_hash")
   createdAt           DateTime @default(now()) @map("created_at")
   updatedAt           DateTime @updatedAt @map("updated_at")
@@ -53,6 +56,11 @@ model TenantUser {
   @@unique([tenantId, email])
   @@unique([tenantId, externalUserId])
   @@map("tenant_users")
+}
+
+enum UserRole {
+  USER
+  ADMIN
 }
 
 // VPN devices registered by users

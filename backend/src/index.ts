@@ -7,6 +7,7 @@ import { authRoutes } from './routes/auth.routes';
 import { deviceRoutes } from './routes/device.routes';
 import { vpnRoutes } from './routes/vpn.routes';
 import { licenseRoutes } from './routes/license.routes';
+import { platformAuthRoutes } from './routes/platform-auth.routes';
 import { prisma } from './utils/prisma';
 
 const fastify = Fastify({
@@ -66,7 +67,15 @@ async function start() {
       return { status: 'ok', timestamp: new Date().toISOString() };
     });
 
-    // CVault API v1 routes
+    // ── Platform routes (no product prefix — this IS the platform) ──
+    await fastify.register(
+      async (fastify) => {
+        await fastify.register(platformAuthRoutes, { prefix: '/auth' });
+      },
+      { prefix: '/v1' }
+    );
+
+    // ── CVault product routes ──
     await fastify.register(
       async (fastify) => {
               await fastify.register(authRoutes,    { prefix: '/auth' });
